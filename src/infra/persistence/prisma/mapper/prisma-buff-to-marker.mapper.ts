@@ -23,7 +23,12 @@ export class PrismaBuffToMarkerMapper {
 	static toPrismaTableCreateMany(
 		row: any,
 		buffId: number,
-		markers: Marker[],
+		markers: {
+			value: string;
+			mkname: string;
+			mkid: number;
+			mkorigname: string;
+		}[],
 	): Prisma.buff_to_markerUncheckedCreateInput[] {
 		const buffToMarkers = [];
 		row.forEach((column) => {

@@ -15,11 +15,20 @@ export class RowWriter {
 		@Inject(BuffBuilder) private buffBuilder: BuffBuilder,
 	) {}
 
-	async write(row: any, markers: Marker[]) {
+	async write(
+		row: any,
+		markers: {
+			value: string;
+			mkname: string;
+			mkid: number;
+			mkorigname: string;
+		}[]
+	) {
 		const buffEntity = PrismaBuffMapper.toPrismaTable(row);
+		const dysColumns = this.buffBuilder.build(markers);
 
+		const mr = { ...buffEntity, ...dysColumns };
 		const savedBuffEntity = await this.buffManager.create(buffEntity);
-
 
 		const buffToMarkersEntity = PrismaBuffToMarkerMapper.toPrismaTableCreateMany(
 			row,
