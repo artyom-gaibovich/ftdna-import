@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FTDNALinks {
+  ftdna_links_id Int     @id @default(autoincrement())
+  url            String? @db.VarChar(300)
+  target         String? @db.VarChar(300)
+
+  @@map("ftdna_links")
+}
+
+model DnaResults {
+  dna_results_id    Int     @id @default(autoincrement())
+  kit_number        String? @db.VarChar(500)
+  name              String? @db.VarChar(500)
+  paternal_ancestor String? @db.VarChar(500)
+  country           String? @db.VarChar(500)
+  haplogroup        String? @db.VarChar(500)
+  source_url        String? @db.VarChar(500)
+
+  @@map("dna_results")
+}
+
+model Marker {
+  mkid           Int              @id @default(autoincrement())
+  mktype         Int
+  mkname         String           @unique @db.VarChar(200)
+  mkorigname     String?          @db.VarChar(200)
+  parts          Int
+  mkcmt          String?          @db.VarChar(1000)
+  buff_to_marker buff_to_marker[]
+
+  @@map("marker")
+}
+
+model Buff {
+  buff_id                Int              @id @default(autoincrement())
+  kit_number             String?          @db.VarChar(200)
+  name                   String?          @db.VarChar(200)
+  paternal_ancestor_name String?          @db.VarChar(200)
+  country                String?          @db.VarChar(200)
+  haplogroup             String?          @db.VarChar(200)
+  buff_to_marker         buff_to_marker[]
+
+  @@map("buff")
+}
+
+model buff_to_marker {
+  buff_id Int
+  value   String?
+  Buff    Buff    @relation(fields: [buff_id], references: [buff_id], onDelete: Cascade)
+  Marker  Marker  @relation(fields: [mkid], references: [mkid], onDelete: Cascade)
+  mkid    Int
+
+  @@id([mkid, buff_id])
+  @@map("buff_to_marker")
+}
