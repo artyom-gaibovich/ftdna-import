@@ -1,9 +1,20 @@
+import { Buff } from '@app/domain/ftdna-import/buff';
 import { Injectable } from '@nestjs/common';
-import {Marker} from "@app/domain/ftdna-import/marker";
 
 @Injectable()
-export class TableMapper {
-	mapToBuff(row: any[]): any {
+export class BuffBuilder {
+	build(
+		row: any,
+		markers: {
+			value: string;
+			mkname: string;
+		}[],
+	): Buff {
+		const dysColumns: { [key: string]: string | null } = {};
+		for (let i = 0; i < markers.length; i++) {
+			dysColumns[markers[i].mkname] = markers[i].value || null;
+		}
+
 		const buff = {
 			kit_number: null,
 			name: null,
@@ -11,6 +22,7 @@ export class TableMapper {
 			country: null,
 			haplogroup: null,
 		};
+
 		row.forEach((column) => {
 			switch (column.col) {
 				case 'Kit Number':
@@ -33,33 +45,13 @@ export class TableMapper {
 			}
 		});
 
-		return buff;
-	}
-
-	mapToBuffMarkers(
-		row: any,
-		buffId: number,
-		markers: Marker[],
-	): {
-		buff_id: number;
-		mkid: number;
-		value: string;
-		mkname: string;
-	}[] {
-		const buffToMarkers = [];
-		row.forEach((column) => {
-			const marker = markers.find((m) => m.mkorigname === column.col);
-
-			if (marker) {
-				buffToMarkers.push({
-					buff_id: buffId,
-					mkid: marker.mkid,
-					value: column.data,
-					mkname: marker.mkname,
-				});
-			}
+		return new Buff({
+			kit_number: buff.kit_number,
+			name: buff.name,
+			paternal_ancestor_name: buff.paternal_ancestor_name,
+			country: buff.country,
+			haplogroup: buff.haplogroup,
+			...dysColumns,
 		});
-
-		return buffToMarkers;
 	}
 }

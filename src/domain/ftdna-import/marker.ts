@@ -1,7 +1,7 @@
 import { Entity } from '../../core/entities/entity';
 
 export interface MarkerProps {
-	id?: number;
+	mkid?: number;
 	mktype: number;
 	mkname: string;
 	mkorigname: string;
@@ -14,8 +14,8 @@ export class Marker extends Entity<MarkerProps> {
 		super(props);
 	}
 
-	get id(): number {
-		return this.props.id;
+	get mkid(): number {
+		return this.props.mkid;
 	}
 
 	get mktype(): number {
@@ -32,5 +32,9 @@ export class Marker extends Entity<MarkerProps> {
 
 	get mkcmt(): string {
 		return this.props.mkcmt;
+	}
+
+	get mkorigname(): string {
+		return this.props.mkorigname;
 	}
 }

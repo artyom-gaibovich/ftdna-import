@@ -1,24 +1,27 @@
-import { TableMapper } from '../mapper/table-mapper';
 import { Inject, Injectable } from '@nestjs/common';
-import { BuffToMarkerManager } from '@app/application/ftdna-import/ports/buff-to-marker/buff-to-marker-manager';
-import { BuffManager } from '@app/application/ftdna-import/ports/buff/buff.manager';
-import { BuffToMarker } from '@app/domain/ftdna-import/buff-to-marker';
 import { Marker } from '@app/domain/ftdna-import/marker';
-import {PrismaBuffMapper} from "@app/infra/persistence/prisma/mapper/prisma-buff.mapper";
+import { PrismaBuffMapper } from '@app/infra/persistence/prisma/mapper/prisma-buff.mapper';
+import { BuffManager } from '@app/application/ftdna-import/ports/buff/buff.manager';
+import { BuffToMarkerManager } from '@app/application/ftdna-import/ports/buff-to-marker/buff-to-marker-manager';
+import { BuffToMarker } from '@app/domain/ftdna-import/buff-to-marker';
+import { PrismaBuffToMarkerMapper } from '@app/infra/persistence/prisma/mapper/prisma-buff-to-marker.mapper';
+import { BuffBuilder } from '@app/infra/utils/builder/buff.builder';
 
 @Injectable()
-export class RowProcessor {
+export class RowWriter {
 	constructor(
-		@Inject(TableMapper) private tableMapper: TableMapper,
 		@Inject(BuffManager) private buffManager: BuffManager,
 		@Inject(BuffToMarkerManager) private buffToMarkerManager: BuffToMarkerManager,
+		@Inject(BuffBuilder) private buffBuilder: BuffBuilder,
 	) {}
 
-	async process(row: any, markers: Marker[]) {
+	async write(row: any, markers: Marker[]) {
 		const buffEntity = PrismaBuffMapper.toPrismaTable(row);
+
 		const savedBuffEntity = await this.buffManager.create(buffEntity);
 
-		const buffToMarkersEntity = this.tableMapper.mapToBuffMarkers(
+
+		const buffToMarkersEntity = PrismaBuffToMarkerMapper.toPrismaTableCreateMany(
 			row,
 			savedBuffEntity.buff_id,
 			markers,
@@ -34,7 +37,5 @@ export class RowProcessor {
 					}),
 			),
 		);
-
-		//await this.buffManager.updateDynamicCol(buffToMarkersEntity, savedBuffEntity.buff_id);
 	}
 }

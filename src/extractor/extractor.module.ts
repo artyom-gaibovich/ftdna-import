@@ -1,5 +1,5 @@
 import {Module} from '@nestjs/common';
-import {HtmlTableExtractor} from "./html-table.extractor";
+import {HtmlTableExtractor} from "@app/infra/utils/table/html-table.extractor";
 import {HtmlHeadersExtractor} from "./html-headers.extractor";
 
 @Module({

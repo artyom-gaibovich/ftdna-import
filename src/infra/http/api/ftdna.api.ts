@@ -1,11 +1,9 @@
-import { firstValueFrom } from 'rxjs';
-import { BadRequestException, HttpServer } from '@nestjs/common';
-import axios from 'axios';
 import { BuffImportDto } from '@app/infra/http/dto/buff-import-dto';
+import axios from 'axios';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
-export class FtdnaClient {
-	constructor(private readonly httpService: HttpServer) {}
-
+@Injectable()
+export class FtdnaApi {
 	async post(url: string, dto: BuffImportDto): Promise<any> {
 		try {
 			const result = await axios.post<any>(url, dto, {

@@ -1,5 +1,5 @@
 import {Entity} from "@app/core/entities/entity";
-import {buff_to_marker} from "@prisma/client";
+
 
 export interface BuffProps {
     buff_id?: number;

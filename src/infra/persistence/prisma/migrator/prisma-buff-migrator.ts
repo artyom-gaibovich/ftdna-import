@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from '../infra/persistence/prisma/prisma.service';
-import { Marker } from '@prisma/client';
+import { PrismaService } from '@app/infra/persistence/prisma/prisma.service';
+import { Marker } from '@app/domain/ftdna-import/marker';
 
 @Injectable()
-export class BuffMigrationService {
+export class PrismaBuffMigrator {
 	constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
-	async addDysColumns(markers: Marker[]): Promise<void> {
+	async createDynamicColumns(markers: Marker[]): Promise<void> {
 		for (const marker of markers) {
 			const columnName = marker.mkname;
 			await this.prisma.$executeRawUnsafe(

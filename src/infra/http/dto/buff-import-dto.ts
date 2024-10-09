@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class ImportDto {
+export class BuffImportDto {
 	@IsString()
 	__VIEWSTATE: string;
 
