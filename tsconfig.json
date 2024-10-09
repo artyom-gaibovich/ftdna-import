@@ -17,6 +17,32 @@
     "strictBindCallApply": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@app/core": [
+        "src/core"
+      ],
+      "@app/core/*": [
+        "src/core/*"
+      ],
+      "@app/application": [
+        "src/application"
+      ],
+      "@app/application/*": [
+        "src/application/*"
+      ],
+      "@app/domain": [
+        "src/domain"
+      ],
+      "@app/domain/*": [
+        "src/domain/*"
+      ],
+      "@app/infra": [
+        "src/infra"
+      ],
+      "@app/infra/*": [
+        "src/infra/*"
+      ]
+    }
   }
 }

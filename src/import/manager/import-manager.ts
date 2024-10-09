@@ -3,12 +3,12 @@ import { HtmlTableExtractor } from '../../extractor/html-table.extractor';
 import { ImportDto } from '../dto/import-dto';
 import { Inject, Injectable } from '@nestjs/common';
 import { ImportTargetLink } from '../../utils/component/import-target-link';
-import { PrismaService } from '../../database/prisma/prisma.service';
+import { PrismaService } from '../../infra/persistence/prisma/prisma.service';
 import { BuffMigrationService } from '../../buff/buff-migration.service';
 import { TableMapper } from '../../mapper/table-mapper';
 import { BuffToMarkerRepository } from '../../buff-to-marker/buff-to-marker.repository';
 import { BuffRepository } from '../../buff/buff-repository';
-import { BuffManager } from '../../buff/buff.manager';
+import { PrismaBuffManager } from '../../infra/persistence/prisma/manager/prisma-buff.manager';
 import {RowProcessor} from "../../processor/row.processor";
 
 @Injectable()

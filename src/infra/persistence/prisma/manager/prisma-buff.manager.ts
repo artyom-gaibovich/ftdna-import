@@ -1,9 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from '../database/prisma/prisma.service';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { Buff } from '@app/domain/ftdna-import/buff';
+import { PrismaBuffMapper } from '@app/infra/persistence/prisma/mapper/prisma-buff.mapper';
 
 @Injectable()
-export class BuffManager {
+export class PrismaBuffManager {
 	constructor(@Inject(PrismaService) private prismaService: PrismaService) {}
+
+	async create(buffInput: Buff): Promise<Buff> {
+		const buff = await this.prismaService.buff.create({ data: buffInput });
+		return PrismaBuffMapper.toDomain(buff);
+	}
+
 
 	updateDynamicCol(
 		markers: {

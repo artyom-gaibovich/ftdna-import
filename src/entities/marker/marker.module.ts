@@ -1,5 +1,5 @@
 import {Module} from '@nestjs/common';
-import {PrismaModule} from "../../database/prisma/prisma.module";
+import {PrismaModule} from "../../infra/persistence/prisma/prisma.module";
 import {MarkerMapper} from "./marker.mapper";
 
 @Module({

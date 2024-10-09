@@ -1,9 +1,9 @@
 import {Injectable} from "@nestjs/common";
-import {PrismaService} from "../database/prisma/prisma.service";
+import {PrismaService} from "../prisma.service";
 import {buff_to_marker} from "@prisma/client";
 
 @Injectable()
-export class BuffToMarkerRepository {
+export class PrismaBuffToMarkerManager {
     constructor(private readonly prisma: PrismaService) {}
 
     async createMany(buffToMarker: buff_to_marker[]): Promise<void> {

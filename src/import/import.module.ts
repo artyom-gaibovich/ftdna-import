@@ -3,7 +3,7 @@ import { ImportController } from './import.controller';
 import { ApiModule } from '../api/api.module';
 import { ExtractorModule } from '../extractor/extractor.module';
 import { ImportManager } from './manager/import-manager';
-import { PrismaModule } from '../database/prisma/prisma.module';
+import { PrismaModule } from '../infra/persistence/prisma/prisma.module';
 import { MarkerModule } from '../entities/marker/marker.module';
 import { BuffModule } from '../buff/buff.module';
 import { MapperModule } from '../mapper/mapper.module';

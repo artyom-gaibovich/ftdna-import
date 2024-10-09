@@ -15,7 +15,7 @@ import { ImportManager } from './manager/import-manager';
 import * as fs from 'node:fs';
 import * as readline from 'node:readline';
 import * as path from 'node:path';
-import { PrismaService } from '../database/prisma/prisma.service';
+import { PrismaService } from '../infra/persistence/prisma/prisma.service';
 
 @Controller('import')
 export class ImportController {

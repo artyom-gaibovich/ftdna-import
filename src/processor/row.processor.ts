@@ -3,13 +3,13 @@ import { BuffRepository } from '../buff/buff-repository';
 import { BuffToMarkerRepository } from '../buff-to-marker/buff-to-marker.repository';
 import { Inject, Injectable } from '@nestjs/common';
 import { Marker } from '@prisma/client';
-import { BuffManager } from '../buff/buff.manager';
+import { PrismaBuffManager } from '../infra/persistence/prisma/manager/prisma-buff.manager';
 
 @Injectable()
 export class RowProcessor {
 	constructor(
 		@Inject(TableMapper) private tableMapper: TableMapper,
-		@Inject(BuffManager) private buffManager: BuffManager,
+		@Inject(PrismaBuffManager) private buffManager: PrismaBuffManager,
 		@Inject(BuffRepository) private buffRepository: BuffRepository,
 		@Inject(BuffToMarkerRepository) private buffToMarkerRepository: BuffToMarkerRepository,
 	) {}
