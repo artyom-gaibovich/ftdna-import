@@ -5,31 +5,24 @@ import { BuffManager } from '@app/application/ftdna-import/ports/buff/buff.manag
 import { BuffToMarkerManager } from '@app/application/ftdna-import/ports/buff-to-marker/buff-to-marker-manager';
 import { BuffToMarker } from '@app/domain/ftdna-import/buff-to-marker';
 import { PrismaBuffToMarkerMapper } from '@app/infra/persistence/prisma/mapper/prisma-buff-to-marker.mapper';
-import { BuffBuilder } from '@app/infra/utils/builder/buff.builder';
+import { BuffDysColumnsBuilder } from '@app/infra/utils/builder/buff-dys-columns.builder';
+import {Buff} from "@app/domain/ftdna-import/buff";
 
 @Injectable()
 export class RowWriter {
 	constructor(
 		@Inject(BuffManager) private buffManager: BuffManager,
 		@Inject(BuffToMarkerManager) private buffToMarkerManager: BuffToMarkerManager,
-		@Inject(BuffBuilder) private buffBuilder: BuffBuilder,
+		@Inject(BuffDysColumnsBuilder) private buffBuilder: BuffDysColumnsBuilder,
 	) {}
 
-	async write(
-		row: any,
-		markers: {
-			value: string;
-			mkname: string;
-			mkid: number;
-			mkorigname: string;
-		}[]
-	) {
-		const buffEntity = PrismaBuffMapper.toPrismaTable(row);
-		const dysColumns = this.buffBuilder.build(markers);
-
-		const mr = { ...buffEntity, ...dysColumns };
+	async write(row: any, markers: Marker[]) {
+		const dysColumns = this.buffBuilder.build(row, markers);
+		const buffEntity = PrismaBuffMapper.toPrismaTable(row, dysColumns);
 		const savedBuffEntity = await this.buffManager.create(buffEntity);
 
+
+/*
 		const buffToMarkersEntity = PrismaBuffToMarkerMapper.toPrismaTableCreateMany(
 			row,
 			savedBuffEntity.buff_id,
@@ -45,6 +38,6 @@ export class RowWriter {
 						mkid: el.mkid,
 					}),
 			),
-		);
+		);*/
 	}
 }

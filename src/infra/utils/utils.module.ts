@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { HtmlTableExtractor } from '@app/infra/utils/table/html-table.extractor';
 import { TableExtractor } from '@app/application/ftdna-import/ports/components/table/table.extractor';
 import { RowWriter } from '@app/infra/utils/row/row.writer';
-import { BuffBuilder } from '@app/infra/utils/builder/buff.builder';
+import { BuffDysColumnsBuilder } from '@app/infra/utils/builder/buff-dys-columns.builder';
 
 @Module({
 	providers: [
@@ -15,8 +15,8 @@ import { BuffBuilder } from '@app/infra/utils/builder/buff.builder';
 			useClass: RowWriter,
 		},
 		{
-			provide: BuffBuilder,
-			useClass: BuffBuilder,
+			provide: BuffDysColumnsBuilder,
+			useClass: BuffDysColumnsBuilder,
 		},
 	],
 	exports: [TableExtractor, RowWriter],

@@ -3,13 +3,7 @@ import { Buff } from '@app/domain/ftdna-import/buff';
 
 export class PrismaBuffMapper {
 	static toPrisma(buff: Buff): Prisma.BuffUncheckedCreateInput {
-		return {
-			name: buff.name,
-			paternal_ancestor_name: buff.paternal_ancestor_name,
-			country: buff.country,
-			haplogroup: buff.haplogroup,
-			kit_number: buff.kit_number,
-		};
+		return buff.props
 	}
 
 	static toDomain(entity: PrismaBuff): Buff {
@@ -24,7 +18,7 @@ export class PrismaBuffMapper {
 		return model;
 	}
 
-	static toPrismaTable(row: any): Buff {
+	static toPrismaTable(row: any, dysColumns: { [key: string]: string | null }): Buff {
 		const buff = {
 			kit_number: null,
 			name: null,
@@ -54,11 +48,12 @@ export class PrismaBuffMapper {
 			}
 		});
 		return new Buff({
-			kit_number : buff.kit_number,
-			name : buff.name,
-			paternal_ancestor_name : buff.paternal_ancestor_name,
-			country : buff.country,
-			haplogroup : buff.haplogroup,
+			kit_number: buff.kit_number,
+			name: buff.name,
+			paternal_ancestor_name: buff.paternal_ancestor_name,
+			country: buff.country,
+			haplogroup: buff.haplogroup,
+			...dysColumns,
 		});
 	}
 }

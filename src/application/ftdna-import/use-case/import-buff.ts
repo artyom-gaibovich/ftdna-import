@@ -23,9 +23,7 @@ export class ImportBuffUseCase {
 			dto,
 		);
 		const extractedTable = this.tableExtractor.extract(fetchedHTML);
-
 		const markers = await this.markerRepository.findMany();
-
 		await Promise.all(extractedTable.map((row) => this.rowWriter.write(row, markers)));
 
 		return fetchedHTML;
