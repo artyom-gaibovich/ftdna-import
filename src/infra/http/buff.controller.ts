@@ -1,45 +1,47 @@
-import { Body, Controller, Inject, Post, Query } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Inject,
+	Post,
+	Query,
+	UsePipes,
+	ValidationPipe,
+} from '@nestjs/common';
 import { BuffImportDto } from '@app/infra/http/dto/buff-import-dto';
-import { ImportManager } from '../../import/manager/import-manager';
 import { ImportBuffUseCase } from '@app/application/ftdna-import/use-case/import-buff';
+import { ReadBuffLinksUseCase } from '@app/application/ftdna-import/use-case/read-buff-links';
+import { ImportBuffAllUseCase } from '@app/application/ftdna-import/use-case/import-buff-all';
+import { ClearBuffUseCase } from '@app/application/ftdna-import/use-case/clear-buff';
 
 @Controller('buff')
 export class BuffController {
-	constructor(@Inject(ImportBuffUseCase) private importBuffUseCase: ImportBuffUseCase) {}
+	constructor(
+		@Inject(ImportBuffUseCase) private importBuffUseCase: ImportBuffUseCase,
+		@Inject(ImportBuffAllUseCase) private importBuffAllUseCase: ImportBuffAllUseCase,
+		@Inject(ReadBuffLinksUseCase) private readBuffLinksUseCase: ReadBuffLinksUseCase,
+		@Inject(ClearBuffUseCase) private clearBuffUseCase: ClearBuffUseCase,
+	) {}
 
+	@UsePipes(new ValidationPipe())
 	@Post('import')
 	async import(@Body() dto: BuffImportDto, @Query('link') link: string): Promise<any> {
 		const res = dto;
 		return await this.importBuffUseCase.execute(link, dto);
 	}
 
-	/*
-
-	@Post('all')
+	@Post('import/all')
 	async importAll(@Body() dto: BuffImportDto): Promise<any> {
-		return await this.importManager.importAll(dto)
+		return await this.importBuffAllUseCase.execute(dto);
 	}
-*/
 
-	/*@Post('read')
+	@Delete()
+	async deleteAll() {
+		return await this.clearBuffUseCase.execute();
+	}
+
+	@Post('read')
 	async read() {
-		const fileStream = fs.createReadStream(path.join('.', '.', 'links.txt'));
-		const rl = readline.createInterface({
-			input: fileStream,
-			crlfDelay: Infinity,
-		});
-		rl.on('line', async (line) => {
-			console.log(`Строка из файла: ${line}`);
-			const splitted_line = line.split('/')
-			await this.prismaService.fTDNALinks.create({
-				data: {
-					url: line,
-					target: splitted_line[splitted_line.length-1],
-				},
-			});
-		});
-		rl.on('close', () => {
-			console.log('Чтение файла завершено');
-		});
-	}*/
+		await this.readBuffLinksUseCase.execute();
+	}
 }

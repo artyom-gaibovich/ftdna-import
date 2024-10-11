@@ -21,4 +21,7 @@ export class BuffImportDto {
 
 	@IsString()
 	ftdna_content_type: string;
+
+	@IsString()
+	base_url: string;
 }
